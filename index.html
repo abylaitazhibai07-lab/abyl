@@ -1,0 +1,648 @@
+<!DOCTYPE html>
+<html lang="ru" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Central Asian Youth Parliament</title>
+  
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+  <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/vanilla-tilt/1.8.1/vanilla-tilt.min.js"></script>
+
+  <script>
+      tailwind.config = {
+          theme: {
+              extend: {
+                  fontFamily: { sans: ['Plus Jakarta Sans', 'sans-serif'] },
+                  colors: { brand: { 50: '#f0f9ff', 100: '#e0f2fe', 500: '#0284c7', 600: '#0369a1', 800: '#075985', 900: '#0c4a6e' } }
+              }
+          }
+      }
+  </script>
+  <style>
+      .glass-card { background: rgba(255, 255, 255, 0.88); backdrop-filter: blur(16px); border: 1px solid rgba(226, 232, 240, 0.9); }
+      .hero-bg { background: radial-gradient(circle at 80% 20%, rgba(2, 132, 199, 0.12), transparent 45%), radial-gradient(circle at 20% 80%, rgba(217, 119, 6, 0.08), transparent 45%); }
+      @keyframes float { 0%, 100% { transform: translateY(0px); } 50% { transform: translateY(-8px); } }
+      .animate-float { animation: float 4s ease-in-out infinite; }
+      .typing-cursor::after { content: '|'; animation: blink 0.8s infinite; color: #0284c7; }
+      @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
+  </style>
+</head>
+<body class="bg-slate-50 text-slate-800 font-sans antialiased selection:bg-brand-500 selection:text-white overflow-x-hidden">
+
+  <!-- НАВИГАЦИЯ -->
+  <header class="sticky top-0 z-50 glass-card border-b border-slate-200/80 transition-all duration-300">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+          <a href="#" class="flex items-center space-x-3 group">
+              <img src="https://i.ibb.co.com/Y4XfddrN/logo-cayp.png" alt="CA Youth Parliament Logo" class="h-11 w-auto object-contain transition-transform duration-300 group-hover:scale-110" />
+              <div>
+                  <span class="font-extrabold text-slate-900 text-lg tracking-tight block leading-none transition-colors group-hover:text-brand-600">CA YOUTH PARLIAMENT</span>
+                  <div class="flex items-center gap-1.5 mt-1">
+                      <span class="text-xs">🇰🇿 🇰🇬 🇹🇯 🇹🇲 🇺🇿</span>
+                      <span class="text-[10px] text-slate-400 font-bold uppercase tracking-wider">Платформа лидеров ЦА</span>
+                  </div>
+              </div>
+          </a>
+
+          <nav class="hidden md:flex items-center space-x-6 text-sm font-semibold">
+              <a href="#about" class="text-slate-600 hover:text-brand-600 transition-colors">О нас</a>
+              <a href="#departments" class="text-slate-600 hover:text-brand-600 transition-colors">Департаменты</a>
+              <a href="#events" class="text-slate-600 hover:text-brand-600 transition-colors flex items-center gap-1"><i data-lucide="calendar" class="w-4 h-4"></i> Мероприятия</a>
+              <a href="#courses" class="text-slate-600 hover:text-brand-600 transition-colors">Курсы</a>
+              <a href="#ai-assistant" class="text-slate-600 hover:text-brand-600 transition-colors flex items-center gap-1.5"><i data-lucide="sparkles" class="w-4 h-4 text-brand-500"></i> ИИ-Помощник</a>
+          </nav>
+
+          <div id="authNavContainer">
+            <button onclick="openAuthModal()" class="inline-flex items-center justify-center px-4 py-2.5 rounded-xl text-sm font-semibold text-white bg-brand-600 hover:bg-brand-800 transition-all shadow-md active:scale-95">
+                <i data-lucide="user" class="w-4 h-4 mr-1.5"></i> Войти / Регистрация
+            </button>
+          </div>
+      </div>
+  </header>
+
+  <!-- ЛИЧНЫЙ КАБИНЕТ -->
+  <section id="dashboardSection" class="hidden py-10 bg-slate-900 text-white border-b border-slate-800">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="bg-slate-800/80 rounded-3xl p-6 md:p-8 border border-slate-700 shadow-2xl">
+        <div class="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-6 mb-8 border-b border-slate-700/80 pb-6">
+          <div class="flex items-center gap-4">
+            <div class="w-16 h-16 rounded-2xl bg-gradient-to-tr from-brand-500 to-amber-400 flex items-center justify-center text-3xl font-black shadow-lg">🏆</div>
+            <div>
+              <div class="flex items-center gap-2">
+                <h2 id="dashUserName" class="text-2xl font-black">Участник</h2>
+                <span id="dashLevelBadge" class="bg-amber-400/20 text-amber-300 text-xs font-bold px-2.5 py-0.5 rounded-full border border-amber-400/30">Уровень 1</span>
+              </div>
+              <p class="text-xs text-slate-400 mt-1">Департамент: <span id="dashUserDept" class="text-white font-semibold">-</span> | Страна: <span id="dashUserCountry" class="text-white font-semibold">-</span></p>
+            </div>
+          </div>
+
+          <div class="flex flex-wrap items-center gap-4">
+            <div class="bg-slate-900/80 px-4 py-2.5 rounded-2xl border border-slate-700 flex items-center gap-3">
+              <span class="text-2xl">🔥</span>
+              <div>
+                <div class="text-[10px] text-slate-400 font-bold uppercase">Стрик заходов</div>
+                <div id="dashStreak" class="text-sm font-extrabold text-amber-400">1 день подряд</div>
+              </div>
+            </div>
+
+            <div class="bg-slate-900/80 px-4 py-2.5 rounded-2xl border border-slate-700 flex items-center gap-3">
+              <span class="text-2xl">💎</span>
+              <div>
+                <div class="text-[10px] text-slate-400 font-bold uppercase">Монеты CA-Coins</div>
+                <div id="dashCoins" class="text-sm font-extrabold text-brand-400">100 CC</div>
+              </div>
+            </div>
+
+            <button id="dailyRewardBtn" class="bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-slate-950 font-black px-5 py-3 rounded-2xl text-xs transition-all shadow-lg active:scale-95 flex items-center gap-2">
+              <span>🎁</span> Забрать бонус (+50 XP)
+            </button>
+          </div>
+        </div>
+
+        <div class="mb-8">
+          <div class="flex justify-between text-xs font-bold mb-2">
+            <span class="text-slate-300">Ваш Прогресс (XP):</span>
+            <span id="dashXpText" class="text-slate-400">100 / 300 XP</span>
+          </div>
+          <div class="w-full h-3 bg-slate-900 rounded-full overflow-hidden p-0.5 border border-slate-700">
+            <div id="dashXpBar" class="h-full bg-gradient-to-r from-brand-500 to-amber-400 rounded-full transition-all duration-500" style="width: 33%"></div>
+          </div>
+        </div>
+
+        <div>
+          <h3 class="text-sm font-bold uppercase tracking-wider text-slate-400 mb-4 flex items-center gap-2">
+            <i data-lucide="target" class="w-4 h-4 text-brand-400"></i> Челленджи и Достижения
+          </h3>
+          <div class="grid sm:grid-cols-3 gap-4" id="challengesContainer"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- БАННЕР -->
+  <section class="relative py-20 lg:py-24 overflow-hidden hero-bg">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+          <div class="max-w-3xl mx-auto text-center">
+              <div data-aos="fade-down" class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white shadow-sm border border-slate-200/80 mb-6 animate-float">
+                  <span class="flex gap-1.5 text-lg">🇰🇿 🇰🇬 🇹🇯 🇹🇲 🇺🇿</span>
+                  <span class="h-3 w-px bg-slate-300 mx-1"></span>
+                  <span class="text-xs font-bold text-slate-600 uppercase tracking-wider">Молодежная политика и дипломатия</span>
+              </div>
+
+              <h1 data-aos="fade-up" class="text-4xl sm:text-5xl lg:text-6xl font-black text-slate-900 tracking-tight leading-tight min-h-[120px]">
+                Central Asian <br>
+                <span class="text-transparent bg-clip-text bg-gradient-to-r from-brand-500 to-brand-800 typing-cursor" id="typewriterText"></span>
+              </h1>
+              
+              <p data-aos="fade-up" data-aos-delay="200" class="mt-6 text-lg text-slate-600 font-normal leading-relaxed">
+                Платформа для развития молодых лидеров, реализации международных инициатив, экологических и социальных проектов в 5 странах Центральной Азии.
+              </p>
+
+              <div data-aos="zoom-in" data-aos-delay="400" class="mt-8 flex justify-center">
+                  <a href="#events" class="px-8 py-4 rounded-xl bg-brand-600 hover:bg-brand-800 text-white font-bold text-base shadow-xl shadow-brand-500/20 transition-all flex items-center gap-2">
+                      <span>Смотреть мероприятия и программы</span>
+                      <i data-lucide="arrow-right" class="w-5 h-5"></i>
+                  </a>
+              </div>
+          </div>
+      </div>
+  </section>
+
+  <!-- О НАС -->
+  <section id="about" class="py-20 bg-white">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center mb-12" data-aos="fade-up">
+        <h2 class="text-3xl font-extrabold text-slate-900 tracking-tight sm:text-4xl">О нашей организации</h2>
+        <p class="text-brand-600 font-bold text-lg mt-2">Зачем мы создали данное объединение?</p>
+      </div>
+
+      <div class="grid md:grid-cols-2 gap-12 items-center">
+        <div class="space-y-6 text-slate-600 text-base leading-relaxed" data-aos="fade-right">
+          <p><b class="text-slate-900">Central Asian Youth Parliament</b> был создан с главной целью — <b class="text-slate-900">дать возможность молодым людям воплощать свои смелые идеи и инициативы в реальность</b>.</p>
+          <p>Мы верим, что молодежь Центральной Азии обладает огромным потенциалом, креативностью и стремлением менять мир к лучшему.</p>
+        </div>
+
+        <div class="grid grid-cols-1 gap-6" data-aos="fade-left">
+          <div class="p-6 bg-slate-50 rounded-2xl border-l-4 border-brand-500 shadow-sm">
+            <h3 class="text-lg font-bold text-slate-900 mb-1">💡 Воплощение идей</h3>
+            <p class="text-sm text-slate-600">Помогаем трансформировать задумку участника в готовый проект.</p>
+          </div>
+          <div class="p-6 bg-slate-50 rounded-2xl border-l-4 border-brand-600 shadow-sm">
+            <h3 class="text-lg font-bold text-slate-900 mb-1">🚀 Развитие навыков</h3>
+            <p class="text-sm text-slate-600">Проводим воркшопы, языковые курсы и тренинги.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 6 ДЕПАРТАМЕНТОВ -->
+  <section id="departments" class="py-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="text-center mb-12" data-aos="fade-up">
+      <h2 class="text-3xl font-extrabold text-slate-900 tracking-tight sm:text-4xl">Все 6 Департаментов</h2>
+      <p class="text-slate-500 text-sm mt-2">Ключевые направления развития Парламента</p>
+    </div>
+
+    <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <div data-tilt class="p-6 rounded-2xl bg-white border border-slate-200 shadow-sm hover:shadow-xl transition-all">
+        <div class="w-10 h-10 rounded-lg bg-blue-100 text-blue-600 flex items-center justify-center mb-4"><i data-lucide="globe" class="w-5 h-5"></i></div>
+        <h3 class="text-lg font-bold text-slate-900 mb-2">1. Международные Отношения</h3>
+        <p class="text-slate-600 text-xs mb-4">Дипломатические симуляции, модель ООН и международные встречи.</p>
+      </div>
+
+      <div data-tilt class="p-6 rounded-2xl bg-white border border-slate-200 shadow-sm hover:shadow-xl transition-all">
+        <div class="w-10 h-10 rounded-lg bg-emerald-100 text-emerald-600 flex items-center justify-center mb-4"><i data-lucide="leaf" class="w-5 h-5"></i></div>
+        <h3 class="text-lg font-bold text-slate-900 mb-2">2. Экология</h3>
+        <p class="text-slate-600 text-xs mb-4">Климатические проекты, волонтерские акции и зеленые технологии.</p>
+      </div>
+
+      <div data-tilt class="p-6 rounded-2xl bg-white border border-slate-200 shadow-sm hover:shadow-xl transition-all">
+        <div class="w-10 h-10 rounded-lg bg-indigo-100 text-indigo-600 flex items-center justify-center mb-4"><i data-lucide="share-2" class="w-5 h-5"></i></div>
+        <h3 class="text-lg font-bold text-slate-900 mb-2">3. Медиа и PR</h3>
+        <p class="text-slate-600 text-xs mb-4">Создание медиаконтента, SMM, продвижение и фото/видеопроизводство.</p>
+      </div>
+
+      <div data-tilt class="p-6 rounded-2xl bg-white border border-slate-200 shadow-sm hover:shadow-xl transition-all">
+        <div class="w-10 h-10 rounded-lg bg-amber-100 text-amber-600 flex items-center justify-center mb-4"><i data-lucide="newspaper" class="w-5 h-5"></i></div>
+        <h3 class="text-lg font-bold text-slate-900 mb-2">4. Журналистика</h3>
+        <p class="text-slate-600 text-xs mb-4">Написание статей, проведение интервью, аналитика и публицистика.</p>
+      </div>
+
+      <div data-tilt class="p-6 rounded-2xl bg-white border border-slate-200 shadow-sm hover:shadow-xl transition-all">
+        <div class="w-10 h-10 rounded-lg bg-purple-100 text-purple-600 flex items-center justify-center mb-4"><i data-lucide="briefcase" class="w-5 h-5"></i></div>
+        <h3 class="text-lg font-bold text-slate-900 mb-2">5. Бизнес и Стартапы</h3>
+        <p class="text-slate-600 text-xs mb-4">Развитие предпринимательства, питчинги и акселерация молодежных проектов.</p>
+      </div>
+
+      <div data-tilt class="p-6 rounded-2xl bg-white border border-slate-200 shadow-sm hover:shadow-xl transition-all">
+        <div class="w-10 h-10 rounded-lg bg-rose-100 text-rose-600 flex items-center justify-center mb-4"><i data-lucide="book-open" class="w-5 h-5"></i></div>
+        <h3 class="text-lg font-bold text-slate-900 mb-2">6. Образование и Наука</h3>
+        <p class="text-slate-600 text-xs mb-4">Академические исследования, лекции, языковые клубы и дебаты.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- МЕРОПРИЯТИЯ -->
+  <section id="events" class="py-16 bg-white border-t border-slate-200">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center mb-12" data-aos="fade-up">
+        <span class="bg-brand-50 text-brand-600 text-xs font-bold px-3 py-1 rounded-full border border-brand-100 uppercase tracking-wider">Календарь событий</span>
+        <h2 class="text-3xl font-extrabold text-slate-900 mt-2 sm:text-4xl">Предстоящие Мероприятия</h2>
+        <p class="text-slate-500 text-sm mt-1">Войдите в систему, чтобы записаться и получить XP за участие</p>
+      </div>
+
+      <div class="grid md:grid-cols-3 gap-6" id="eventsGrid"></div>
+    </div>
+  </section>
+
+  <!-- КУРСЫ -->
+  <section id="courses" class="py-16 bg-slate-50 border-t border-slate-200">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center mb-12" data-aos="fade-up">
+        <span class="bg-purple-50 text-purple-600 text-xs font-bold px-3 py-1 rounded-full border border-purple-100 uppercase tracking-wider">Обучение</span>
+        <h2 class="text-3xl font-extrabold text-slate-900 mt-2 sm:text-4xl">Образовательные Курсы</h2>
+        <p class="text-slate-500 text-sm mt-1">Прокачивайте свои мягкие и твердые навыки вместе с экспертами</p>
+      </div>
+
+      <div class="grid md:grid-cols-3 gap-6">
+        <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm flex flex-col justify-between">
+          <div>
+            <span class="text-[10px] font-bold bg-blue-100 text-blue-800 px-2 py-0.5 rounded">4 Недели</span>
+            <h3 class="font-bold text-lg text-slate-900 mt-2 mb-1">Основы Публичных Выступлений</h3>
+            <p class="text-xs text-slate-500 mb-4">Научитесь убедительно говорить перед любой аудиторией и вести дебаты.</p>
+          </div>
+          <button onclick="enrollCourse('Публичные выступления')" class="w-full bg-slate-900 text-white font-bold py-2.5 rounded-xl text-xs hover:bg-slate-800">Записаться на курс</button>
+        </div>
+
+        <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm flex flex-col justify-between">
+          <div>
+            <span class="text-[10px] font-bold bg-emerald-100 text-emerald-800 px-2 py-0.5 rounded">6 Недель</span>
+            <h3 class="font-bold text-lg text-slate-900 mt-2 mb-1">Управление Проектами (PM)</h3>
+            <p class="text-xs text-slate-500 mb-4">От идеи до реализации: планирование, бюджеты и руководство командой.</p>
+          </div>
+          <button onclick="enrollCourse('Управление Проектами')" class="w-full bg-slate-900 text-white font-bold py-2.5 rounded-xl text-xs hover:bg-slate-800">Записаться на курс</button>
+        </div>
+
+        <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm flex flex-col justify-between">
+          <div>
+            <span class="text-[10px] font-bold bg-indigo-100 text-indigo-800 px-2 py-0.5 rounded">3 Недели</span>
+            <h3 class="font-bold text-lg text-slate-900 mt-2 mb-1">Международное Право & Дипломатия</h3>
+            <p class="text-xs text-slate-500 mb-4">Базовые основы дипломатического этикета и международных договоров.</p>
+          </div>
+          <button onclick="enrollCourse('Международное Право')" class="w-full bg-slate-900 text-white font-bold py-2.5 rounded-xl text-xs hover:bg-slate-800">Записаться на курс</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ИИ-ЧАТ -->
+  <section id="ai-assistant" class="py-16 bg-white border-t border-slate-200">
+    <div class="max-w-3xl mx-auto px-4">
+      <div class="w-full bg-slate-50 rounded-3xl shadow-xl border border-slate-200 overflow-hidden flex flex-col h-[450px]">
+        <header class="bg-slate-900 text-white p-4 flex items-center justify-between">
+          <div class="flex items-center space-x-3">
+            <div class="w-9 h-9 rounded-xl bg-brand-500 flex items-center justify-center font-bold text-white">🏛</div>
+            <div>
+              <h3 class="font-bold text-sm">CA Youth Parliament Bot</h3>
+              <p class="text-[11px] text-slate-300">Онлайн-помощник</p>
+            </div>
+          </div>
+        </header>
+
+        <main id="chatMessages" class="flex-1 p-4 overflow-y-auto space-y-4 text-sm">
+          <div class="bg-white border border-slate-200 p-4 rounded-2xl shadow-sm max-w-[85%] text-slate-800">
+            Приветствуем вас! Задавайте вопросы по регистрации, департаментам и мероприятиям!
+          </div>
+        </main>
+
+        <footer class="p-3 bg-white border-t border-slate-200">
+          <form id="chatForm" onsubmit="handleSendChat(event)" class="flex gap-2">
+            <input type="text" id="userInput" placeholder="Задайте вопрос..." class="flex-1 border border-slate-200 rounded-xl px-4 py-2.5 text-sm bg-slate-50 outline-none" required />
+            <button type="submit" class="bg-slate-900 hover:bg-slate-800 text-white px-6 py-2.5 rounded-xl font-bold text-sm transition-all active:scale-95">Отправить</button>
+          </form>
+        </footer>
+      </div>
+    </div>
+  </section>
+
+  <!-- МОДАЛЬНОЕ ОКНО РЕГИСТРАЦИИ -->
+  <div id="authModal" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-50 opacity-0 pointer-events-none transition-all duration-300 flex items-center justify-center p-4">
+    <div class="bg-white w-full max-w-md rounded-3xl shadow-2xl border border-slate-200 overflow-hidden relative">
+      <button onclick="closeAuthModal()" class="absolute top-4 right-4 text-slate-400 hover:text-slate-800 font-bold text-xl">✕</button>
+
+      <div class="p-8">
+        <h3 class="text-2xl font-extrabold text-slate-900 text-center mb-1">Регистрация / Вход</h3>
+        <p class="text-xs text-center text-slate-500 mb-6">Создайте профиль, чтобы зайти в личный кабинет и забрать +100 XP</p>
+
+        <form id="registerForm" onsubmit="handleRegister(event)" class="space-y-4">
+          <div>
+            <label class="block text-xs font-bold uppercase tracking-wider text-slate-600 mb-1">ФИО Участника</label>
+            <input type="text" id="regName" required placeholder="Иван Иванов" class="w-full p-3 border border-slate-200 rounded-xl outline-none text-sm" />
+          </div>
+
+          <div>
+            <label class="block text-xs font-bold uppercase tracking-wider text-slate-600 mb-1">Email</label>
+            <input type="email" id="regEmail" required placeholder="example@gmail.com" class="w-full p-3 border border-slate-200 rounded-xl outline-none text-sm" />
+          </div>
+
+          <div>
+            <label class="block text-xs font-bold uppercase tracking-wider text-slate-600 mb-1">Страна</label>
+            <select id="regCountry" class="w-full p-3 border border-slate-200 rounded-xl outline-none bg-white text-sm">
+              <option value="Казахстан">Казахстан</option>
+              <option value="Кыргызстан">Кыргызстан</option>
+              <option value="Узбекистан">Узбекистан</option>
+              <option value="Таджикистан">Таджикистан</option>
+              <option value="Туркменистан">Туркменистан</option>
+            </select>
+          </div>
+
+          <div>
+            <label class="block text-xs font-bold uppercase tracking-wider text-slate-600 mb-1">Департамент</label>
+            <select id="regDepartment" class="w-full p-3 border border-slate-200 rounded-xl outline-none bg-white text-sm">
+              <option value="Международные Отношения">1. Международные Отношения</option>
+              <option value="Экология">2. Экология</option>
+              <option value="Медиа и PR">3. Медиа и PR</option>
+              <option value="Журналистика">4. Журналистика</option>
+              <option value="Бизнес и Стартапы">5. Бизнес и Стартапы</option>
+              <option value="Образование и Наука">6. Образование и Наука</option>
+            </select>
+          </div>
+
+          <button type="submit" class="w-full bg-brand-600 hover:bg-brand-800 text-white py-3.5 rounded-xl font-bold transition-all text-sm shadow-lg">
+            Войти в личный кабинет
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <footer class="bg-slate-900 text-slate-400 py-12 border-t border-slate-800">
+    <div class="max-w-7xl mx-auto px-4 text-center space-y-3">
+      <div class="text-lg font-bold tracking-wider text-white uppercase">CENTRAL ASIAN YOUTH PARLIAMENT</div>
+      <p class="text-sm text-slate-300">📍 Адрес офиса: г. Алматы, ул. Байтурсынова 22/к1, 3 этаж (справа)</p>
+      <div class="pt-4 border-t border-slate-800 text-xs text-slate-600">© 2026 Central Asian Youth Parliament. Все права защищены.</div>
+    </div>
+  </footer>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", function() {
+      if (window.lucide) lucide.createIcons();
+      if (window.AOS) AOS.init({ once: true, duration: 800 });
+      updateUI();
+      startTypewriter();
+    });
+
+    const eventsData = [
+      { id: 1, title: "Модель дипломатического саммита ЦА", date: "25 Августа, 16:00", type: "Онлайн / Zoom", xp: 150, category: "Международные Отношения" },
+      { id: 2, title: "Воркшоп: Запуск Эко-стартапа с нуля", date: "28 Августа, 18:00", type: "Алматы / Офлайн", xp: 200, category: "Экология" },
+      { id: 3, title: "Закрытый мастер-класс по Медиа и SMM", date: "2 Сентября, 17:00", type: "Онлайн / Zoom", xp: 100, category: "Медиа и PR" }
+    ];
+
+    function getUserData() {
+      const data = localStorage.getItem("cayp_user_logged_in");
+      return data ? JSON.parse(data) : null;
+    }
+
+    function saveUserData(data) {
+      localStorage.setItem("cayp_user_logged_in", JSON.stringify(data));
+      updateUI();
+    }
+
+    function addXP(amount) {
+      let user = getUserData();
+      if (!user) return;
+      user.xp += amount;
+      user.coins += Math.floor(amount / 2);
+
+      const newLevel = Math.floor(user.xp / 300) + 1;
+      if (newLevel > user.level) {
+        user.level = newLevel;
+        alert(`🎉 ПОЗДРАВЛЯЕМ! Вы достигли ${newLevel} уровня! Вам начислено +100 CA-Coins!`);
+        user.coins += 100;
+      }
+      saveUserData(user);
+    }
+
+    function updateUI() {
+      const user = getUserData();
+      const authNavContainer = document.getElementById("authNavContainer");
+      const dashboardSection = document.getElementById("dashboardSection");
+
+      if (user) {
+        if (dashboardSection) dashboardSection.classList.remove("hidden");
+        if (authNavContainer) {
+          authNavContainer.innerHTML = `
+            <div class="flex items-center space-x-3 bg-slate-100 border border-slate-200 px-3 py-1.5 rounded-xl">
+              <span class="text-xs font-bold text-slate-800">👤 ${user.name}</span>
+              <button onclick="logout()" class="text-xs bg-rose-500 hover:bg-rose-600 text-white font-bold px-2.5 py-1 rounded-lg transition-all">Выйти</button>
+            </div>
+          `;
+        }
+
+        document.getElementById("dashUserName").textContent = user.name;
+        document.getElementById("dashUserDept").textContent = user.department;
+        document.getElementById("dashUserCountry").textContent = user.country;
+        document.getElementById("dashLevelBadge").textContent = `Уровень ${user.level}`;
+        document.getElementById("dashStreak").textContent = `${user.streak} дн. подряд`;
+        document.getElementById("dashCoins").textContent = `${user.coins} CC`;
+        document.getElementById("dashXpText").textContent = `${user.xp} / ${user.level * 300} XP`;
+
+        const xpProgress = ((user.xp % 300) / 300) * 100;
+        document.getElementById("dashXpBar").style.width = `${Math.min(xpProgress, 100)}%`;
+
+        renderChallenges(user);
+      } else {
+        if (dashboardSection) dashboardSection.classList.add("hidden");
+        if (authNavContainer) {
+          authNavContainer.innerHTML = `
+            <button onclick="openAuthModal()" class="inline-flex items-center justify-center px-4 py-2.5 rounded-xl text-sm font-semibold text-white bg-brand-600 hover:bg-brand-800 transition-all shadow-md active:scale-95">
+                <i data-lucide="user" class="w-4 h-4 mr-1.5"></i> Войти / Регистрация
+            </button>
+          `;
+        }
+      }
+
+      renderEvents(user);
+    }
+
+    function logout() {
+      localStorage.removeItem("cayp_user_logged_in");
+      location.reload();
+    }
+
+    function renderEvents(user) {
+      const eventsGrid = document.getElementById("eventsGrid");
+      if (!eventsGrid) return;
+      eventsGrid.innerHTML = "";
+
+      eventsData.forEach(event => {
+        const isRegistered = user && user.registeredEvents && user.registeredEvents.includes(event.id);
+
+        const card = document.createElement("div");
+        card.className = "p-6 rounded-2xl bg-slate-50 border border-slate-200 flex flex-col justify-between hover:shadow-lg transition-all";
+        card.innerHTML = `
+          <div>
+            <div class="flex justify-between items-center mb-3">
+              <span class="text-[10px] font-bold bg-brand-100 text-brand-800 px-2.5 py-1 rounded-md uppercase">${event.category}</span>
+              <span class="text-xs font-bold text-amber-600 bg-amber-50 px-2 py-0.5 rounded border border-amber-200">+${event.xp} XP</span>
+            </div>
+            <h3 class="text-base font-bold text-slate-900 mb-2">${event.title}</h3>
+            <p class="text-xs text-slate-500 mb-1">📅 ${event.date}</p>
+            <p class="text-xs text-slate-500 mb-4">📍 ${event.type}</p>
+          </div>
+          <button 
+            onclick="registerForEvent(${event.id})" 
+            class="w-full py-2.5 rounded-xl font-bold text-xs transition-all ${
+              isRegistered 
+                ? "bg-emerald-100 text-emerald-800 cursor-default" 
+                : "bg-slate-900 hover:bg-slate-800 text-white"
+            }"
+            ${isRegistered ? "disabled" : ""}
+          >
+            ${isRegistered ? "✓ Вы зарегистрированы" : user ? "Зарегистрироваться" : "Войдите для записи"}
+          </button>
+        `;
+        eventsGrid.appendChild(card);
+      });
+    }
+
+    function renderChallenges(user) {
+      const container = document.getElementById("challengesContainer");
+      if (!container) return;
+      const challenges = [
+        { title: "Заполнить профиль", reward: "100 XP", done: true },
+        { title: "Записаться на 2 события", reward: "200 XP", done: user.registeredEvents.length >= 2 },
+        { title: "Заходить 3 дня подряд", reward: "150 XP", done: user.streak >= 3 }
+      ];
+
+      container.innerHTML = challenges.map(c => `
+        <div class="p-3.5 rounded-2xl bg-slate-900/90 border border-slate-700/80 flex items-center justify-between">
+          <div>
+            <div class="text-xs font-bold text-white">${c.title}</div>
+            <div class="text-[10px] text-amber-400 font-bold">Награда: ${c.reward}</div>
+          </div>
+          <span class="text-xs font-bold ${c.done ? 'text-emerald-400' : 'text-slate-500'}">
+            ${c.done ? '✓ Выполнено' : 'В процессе'}
+          </span>
+        </div>
+      `).join("");
+    }
+
+    function registerForEvent(eventId) {
+      let user = getUserData();
+      if (!user) {
+        openAuthModal();
+        return;
+      }
+
+      if (!user.registeredEvents.includes(eventId)) {
+        const event = eventsData.find(e => e.id === eventId);
+        user.registeredEvents.push(eventId);
+        saveUserData(user);
+        addXP(event.xp);
+        alert(`Успех! Вы зарегистрированы на «${event.title}». Вам начислено +${event.xp} XP!`);
+      }
+    }
+
+    function enrollCourse(courseName) {
+      let user = getUserData();
+      if (!user) {
+        openAuthModal();
+      } else {
+        addXP(50);
+        alert(`Вы записались на курс «${courseName}»! Вам начислено +50 XP.`);
+      }
+    }
+
+    document.getElementById("dailyRewardBtn")?.addEventListener("click", () => {
+      let user = getUserData();
+      if (!user) return;
+
+      const today = new Date().toDateString();
+      if (user.lastBonusDate === today) {
+        alert("Вы уже забирали сегодняшний бонус! Возвращайтесь завтра.");
+      } else {
+        user.lastBonusDate = today;
+        user.streak += 1;
+        saveUserData(user);
+        addXP(50);
+        alert("🎁 Вы получили ежедневный бонус: +50 XP и +1 к стрику!");
+      }
+    });
+
+    // ЛОГИКА ОТПРАВКИ СООБЩЕНИЙ В ЧАТ
+    function handleSendChat(e) {
+      e.preventDefault();
+      const input = document.getElementById("userInput");
+      const text = input.value.trim();
+      if (!text) return;
+
+      const chatMessages = document.getElementById("chatMessages");
+
+      // Сообщение пользователя
+      const userMsg = document.createElement("div");
+      userMsg.className = "bg-brand-600 text-white p-3 rounded-2xl shadow-sm max-w-[85%] ml-auto text-sm";
+      userMsg.textContent = text;
+      chatMessages.appendChild(userMsg);
+
+      input.value = "";
+      chatMessages.scrollTop = chatMessages.scrollHeight;
+
+      // Ответ бота
+      setTimeout(() => {
+        const botMsg = document.createElement("div");
+        botMsg.className = "bg-white border border-slate-200 p-3 rounded-2xl shadow-sm max-w-[85%] text-slate-800 text-sm";
+        botMsg.textContent = "Спасибо за вопрос! Чтобы зарегистрироваться, нажмите синюю кнопку 'Войти / Регистрация' в верхней панели сайта.";
+        chatMessages.appendChild(botMsg);
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+      }, 500);
+    }
+
+    // МОДАЛЬНОЕ ОКНО
+    function openAuthModal() {
+      const modal = document.getElementById("authModal");
+      modal.classList.remove("pointer-events-none", "opacity-0");
+      modal.classList.add("opacity-100");
+    }
+
+    function closeAuthModal() {
+      const modal = document.getElementById("authModal");
+      modal.classList.remove("opacity-100");
+      modal.classList.add("opacity-0", "pointer-events-none");
+    }
+
+    function handleRegister(e) {
+      e.preventDefault();
+      const newUser = {
+        name: document.getElementById("regName").value,
+        email: document.getElementById("regEmail").value,
+        country: document.getElementById("regCountry").value,
+        department: document.getElementById("regDepartment").value,
+        xp: 100,
+        level: 1,
+        coins: 100,
+        streak: 1,
+        lastBonusDate: new Date().toDateString(),
+        registeredEvents: []
+      };
+
+      saveUserData(newUser);
+      closeAuthModal();
+      alert("Вы успешно вошли в личный кабинет! Начислено +100 XP.");
+    }
+
+    // ТЕКСТОВАЯ АНИМАЦИЯ
+    function startTypewriter() {
+      const titlePhrases = ["Youth Parliament", "Diplomacy Forum", "Leadership Hub"];
+      let phraseIndex = 0, charIndex = 0, isDeleting = false;
+      const typewriterElement = document.getElementById("typewriterText");
+
+      function typeEffect() {
+        if (!typewriterElement) return;
+        const currentPhrase = titlePhrases[phraseIndex];
+        typewriterElement.textContent = isDeleting 
+          ? currentPhrase.substring(0, charIndex - 1) 
+          : currentPhrase.substring(0, charIndex + 1);
+
+        charIndex += isDeleting ? -1 : 1;
+        let speed = isDeleting ? 50 : 100;
+
+        if (!isDeleting && charIndex === currentPhrase.length) {
+          speed = 2000;
+          isDeleting = true;
+        } else if (isDeleting && charIndex === 0) {
+          isDeleting = false;
+          phraseIndex = (phraseIndex + 1) % titlePhrases.length;
+          speed = 500;
+        }
+
+        setTimeout(typeEffect, speed);
+      }
+      typeEffect();
+    }
+  </script>
+</body>
+</html>
